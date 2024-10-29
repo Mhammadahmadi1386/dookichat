@@ -2,19 +2,67 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <title>مدیریت وظایف</title>
-    <link rel="stylesheet" href="style.css">
+    <title>پیام‌رسان</title>
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+        }
+        main {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        #chat-box {
+            border: 1px solid #ddd;
+            height: 300px;
+            overflow-y: scroll;
+            margin-top: 20px;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>مدیریت وظایف</h1>
+        <h1>پیام‌رسان</h1>
     </header>
     <main>
-        <form id="task-form">
-            <input type="text" id="task-input" placeholder="افزودن وظیفه جدید...">
-            <button type="submit">اضافه کردن</button>
+        <form id="login-form">
+            <input type="text" id="username" placeholder="نام کاربری" required>
+            <button type="submit">ورود</button>
         </form>
-        <ul id="task-list"></ul>
+        <form id="chat-form" style="display: none;">
+            <input type="file" id="file">
+            <input type="text" id="message" placeholder="پیام خود را وارد کنید">
+            <button type="submit">ارسال</button>
+        </form>
+        <div id="chat-box"></div>
     </main>
     <script src="script.js"></script>
 </body>
