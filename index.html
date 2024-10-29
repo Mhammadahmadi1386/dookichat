@@ -3,67 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>پیام‌رسان</title>
-    <style>
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px 0;
-        }
-        main {
-            width: 80%;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        input, button {
-            padding: 10px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-        #chat-box {
-            border: 1px solid #ddd;
-            height: 300px;
-            overflow-y: scroll;
-            margin-top: 20px;
-            padding: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>پیام‌رسان</h1>
-    </header>
-    <main>
-        <form id="login-form">
-            <input type="text" id="username" placeholder="نام کاربری" required>
-            <button type="submit">ورود</button>
-        </form>
-        <form id="chat-form" style="display: none;">
-            <input type="file" id="file">
-            <input type="text" id="message" placeholder="پیام خود را وارد کنید">
+    <h1>پیام‌رسان</h1>
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <form id="message-form">
+            <input type="text" id="message-input" placeholder="پیام خود را وارد کنید">
+            <input type="file" id="file-input">
             <button type="submit">ارسال</button>
         </form>
-        <div id="chat-box"></div>
-    </main>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
