@@ -70,5 +70,13 @@ li.completed {
 
 li button {
     background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
+li button:hover {
+    background-color: darkred;
+}
