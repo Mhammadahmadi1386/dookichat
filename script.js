@@ -1,50 +1,71 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const chatBox = document.getElementById('chat-box');
-    const messageForm = document.getElementById('message-form');
-    const messageInput = document.getElementById('message-input');
-    const fileInput = document.getElementById('file-input');
+    const cells = document.querySelectorAll('.cell');
+    const message = document.getElementById('message');
+    const restartBtn = document.getElementById('restart');
+    let currentPlayer = 'X';
+    let gameActive = true;
+    let gameState = ['', '', '', '', '', '', '', '', ''];
 
-    loadMessages();
+    const winningConditions = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
 
-    messageForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const message = messageInput.value;
-        const file = fileInput.files[0];
-        if (message || file) {
-            addMessageToChatBox(message, file);
-            saveMessage(message, file);
-            messageInput.value = '';
-            fileInput.value = '';
+    const handleCellClick = (e) => {
+        const clickedCell = e.target;
+        const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
+
+        if (gameState[clickedCellIndex] !== '' || !gameActive) {
+            return;
         }
-    });
 
-    function addMessageToChatBox(message, file) {
-        const messageDiv = document.createElement('div');
-        if (message) {
-            messageDiv.textContent = message;
+        gameState[clickedCellIndex] = currentPlayer;
+        clickedCell.textContent = currentPlayer;
+
+        const winner = checkWinner();
+
+        if (winner) {
+            gameActive = false;
+            message.textContent = `بازیکن ${currentPlayer} برنده شد!`;
+            return;
         }
-        if (file) {
-            const fileLink = document.createElement('a');
-            fileLink.href = URL.createObjectURL(file);
-            fileLink.textContent = file.name;
-            fileLink.target = '_blank';
-            messageDiv.appendChild(fileLink);
+
+        if (!gameState.includes('')) {
+            gameActive = false;
+            message.textContent = 'بازی مساوی شد!';
+            return;
         }
-        chatBox.appendChild(messageDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
 
-    function saveMessage(message, file) {
-        const messages = JSON.parse(localStorage.getItem('messages')) || [];
-        const newMessage = { message: message, file: file ? file.name : null };
-        messages.push(newMessage);
-        localStorage.setItem('messages', JSON.stringify(messages));
-    }
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        message.textContent = `نوبت بازیکن ${currentPlayer}`;
+    };
 
-    function loadMessages() {
-        const messages = JSON.parse(localStorage.getItem('messages')) || [];
-        messages.forEach(msg => {
-            addMessageToChatBox(msg.message, msg.file);
-        });
-    }
+    const checkWinner = () => {
+        for (let i = 0; i < winningConditions.length; i++) {
+            const [a, b, c] = winningConditions[i];
+            if (gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    const restartGame = () => {
+        gameActive = true;
+        currentPlayer = 'X';
+        gameState = ['', '', '', '', '', '', '', '', ''];
+        cells.forEach(cell => cell.textContent = '');
+        message.textContent = `نوبت بازیکن ${currentPlayer}`;
+    };
+
+    cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+    restartBtn.addEventListener('click', restartGame);
+
+    message.textContent = `نوبت بازیکن ${currentPlayer}`;
 });
