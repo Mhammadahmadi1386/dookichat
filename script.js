@@ -1,66 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const taskForm = document.getElementById('task-form');
-    const taskInput = document.getElementById('task-input');
-    const taskList = document.getElementById('task-list');
+    const chatBox = document.getElementById('chat-box');
+    const messageForm = document.getElementById('message-form');
+    const messageInput = document.getElementById('message-input');
+    const fileInput = document.getElementById('file-input');
 
-    // بارگذاری وظایف از Local Storage
-    loadTasks();
+    loadMessages();
 
-    taskForm.addEventListener('submit', (e) => {
+    messageForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        addTask(taskInput.value);
-        taskInput.value = '';
+        const message = messageInput.value;
+        const file = fileInput.files[0];
+        if (message || file) {
+            addMessageToChatBox(message, file);
+            saveMessage(message, file);
+            messageInput.value = '';
+            fileInput.value = '';
+        }
     });
 
-    function addTask(task) {
-        const li = document.createElement('li');
-        li.textContent = task;
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = 'حذف';
-        deleteBtn.addEventListener('click', () => {
-            li.remove();
-            saveTasks();
-        });
-        li.appendChild(deleteBtn);
-        li.addEventListener('click', () => {
-            li.classList.toggle('completed');
-            saveTasks();
-        });
-        taskList.appendChild(li);
-        saveTasks();
+    function addMessageToChatBox(message, file) {
+        const messageDiv = document.createElement('div');
+        if (message) {
+            messageDiv.textContent = message;
+        }
+        if (file) {
+            const fileLink = document.createElement('a');
+            fileLink.href = URL.createObjectURL(file);
+            fileLink.textContent = file.name;
+            fileLink.target = '_blank';
+            messageDiv.appendChild(fileLink);
+        }
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function saveTasks() {
-        const tasks = [];
-        taskList.querySelectorAll('li').forEach(li => {
-            tasks.push({
-                text: li.textContent.replace('حذف', '').trim(),
-                completed: li.classList.contains('completed')
-            });
-        });
-        localStorage.setItem('tasks', JSON.stringify(tasks));
+    function saveMessage(message, file) {
+        const messages = JSON.parse(localStorage.getItem('messages')) || [];
+        const newMessage = { message: message, file: file ? file.name : null };
+        messages.push(newMessage);
+        localStorage.setItem('messages', JSON.stringify(messages));
     }
 
-    function loadTasks() {
-        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        tasks.forEach(task => {
-            const li = document.createElement('li');
-            li.textContent = task.text;
-            if (task.completed) {
-                li.classList.add('completed');
-            }
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = 'حذف';
-            deleteBtn.addEventListener('click', () => {
-                li.remove();
-                saveTasks();
-            });
-            li.appendChild(deleteBtn);
-            li.addEventListener('click', () => {
-                li.classList.toggle('completed');
-                saveTasks();
-            });
-            taskList.appendChild(li);
+    function loadMessages() {
+        const messages = JSON.parse(localStorage.getItem('messages')) || [];
+        messages.forEach(msg => {
+            addMessageToChatBox(msg.message, msg.file);
         });
     }
 });
